@@ -1,19 +1,83 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
 
-    <script>
-      // You can also require other files to run in this process
-      require('./renderer.js')
-    </script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+  <link rel="stylesheet" href="./assets/jexcel/css/jquery.jexcel.css" />
+  <link rel="stylesheet" href="./assets/datatable/datatables.min.css" />
+  <script>window.$ = window.jQuery = require('jquery');</script>
+  <script src="./assets/jexcel/js/jquery.jexcel.js"></script>
+  <script src="./assets/datatable/datatables.min.js"></script>
+</head>
+<body>
+
+  <div>
+    <table id="tbUser">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>Email</th>
+          <th>Username</th>
+          <th>Password</th>
+          <th>Create_at</th>
+ 
+        </tr>
+      </thead>
+      <tbody id="tbody_user"></tbody>
+    </table>
+  </div>
+  <script>
+    var knex = require('knex')({
+      client: 'mysql',
+      connection: {
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'yii2_basic'
+      }
+    });
+    load_user = () => {
+      knex.select("*").from("users").then(res=>{
+        let out = "";
+        let result = res.map(function (v, k) {
+          out += `<tr>
+                      <td><input type='text' value='${v.id}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({key:'id'})})' /><span class='td-hidden'>${v.id}</span></td>
+                      <td><input type='text' value='${v.email}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({key:'email'})})' /><span class='td-hidden'>${v.email}</span></td> 
+                      <td><input type='text' value='${v.username}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({key:'username'})})' /><span class='td-hidden'>${v.username}</span></td>
+                      <td><input type='text' value='${v.password}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({key:'password'})})' /><span class='td-hidden'>${v.password}</span></td>
+                      <td><input type='text' value='${v.create_at}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({key:'create_at'})})' /><span class='td-hidden'>${v.create_at}</span></td>
+          </tr>`;  
+        });
+        $('#tbody_user').html(out);
+        $('#tbUser').DataTable();
+      });
+    }
+    load_user();
+  
+    handleChanges = (event, obj, fields) => {
+      let data_value = event.target.value;
+
+      var date = new Date();
+      var create_at = date.toLocaleDateString();
+
+      obj[fields["key"]] = data_value;
+      obj["create_at"] = create_at;
+      let data_id = { id: obj.id };
+      delete obj.id;
+
+      knex('users').update(obj).where(data_id).then(res => { console.warn(res) }).catch(err => console.error(err));
+    }
+  </script>
+</body>
+
 </html>
+<style>
+  #tbody_user tr td input {
+    background: transparent;
+    border: none;
+  }
+  .td-hidden{
+    display: none;
+  }
+</style>

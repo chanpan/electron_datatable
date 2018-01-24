@@ -4,10 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Hello World!</title>
-  <link rel="stylesheet" href="./assets/jexcel/css/jquery.jexcel.css" />
   <link rel="stylesheet" href="./assets/datatable/datatables.min.css" />
   <script>window.$ = window.jQuery = require('jquery');</script>
-  <script src="./assets/jexcel/js/jquery.jexcel.js"></script>
   <script src="./assets/datatable/datatables.min.js"></script>
 </head>
 
@@ -46,25 +44,34 @@
           
           out += `<tr>
                        
-                      <td><input type='text' id='data-${num++}' value='${v.email}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'email' })})' /><span class='td-hidden'>${v.email}</span></td> 
-                      <td><input type='text' id='data-${num++}' value='${v.username}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'username' })})' /><span class='td-hidden'>${v.username}</span></td>
-                      <td><input type='text' id='data-${num++}' value='${v.password}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'password' })})' /><span class='td-hidden'>${v.password}</span></td>
-                      <td><input type='text' id='data-${num++}' value='${v.create_at}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'create_at' })})' /><span class='td-hidden'>${v.create_at}</span></td>
+                      <td><input type='text' class='tab' id='data-${num++}' value='${v.email}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'email' })})' /><span class='td-hidden'>${v.email}</span></td> 
+                      <td><input type='text' class='tab' id='data-${num++}' value='${v.username}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'username' })})' /><span class='td-hidden'>${v.username}</span></td>
+                      <td><input type='text' class='tab' id='data-${num++}' value='${v.password}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'password' })})' /><span class='td-hidden'>${v.password}</span></td>
+                      <td><input type='text' class='tab' id='data-${num++}' value='${v.create_at}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'create_at' })})' /><span class='td-hidden'>${v.create_at}</span></td>
           </tr>`;
           
         });
         $('#tbody_user').html(out);
         $('#tbUser').DataTable();
+        $('.tab').bind('keypress', function(e) {
+          var keyCode = e.keyCode || e.which;
+          if(keyCode === 13) {
+              e.preventDefault();
+              $('input, select, textarea')
+              [$('input,select,textarea').index(this)+1].focus();
+          }
+          //
+            
+        });
       });
     }
     load_user();
-
+    
     handleChanges = (event, obj, fields) => {
       let data_value = event.target.value;
- 
-      let data_next_focus = event.target.id.split("-")[1];
-      data_next_focus = parseInt(data_next_focus)+1;
-      $('#data-'+data_next_focus).focus();
+      // let data_next_focus = event.target.id.split("-")[1];
+      // data_next_focus = parseInt(data_next_focus)+1;
+
       var date = new Date();
       var create_at = date.toLocaleDateString();
 

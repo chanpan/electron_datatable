@@ -17,7 +17,7 @@
     <table id="tbUser">
       <thead>
         <tr>
-          <th>id</th>
+          
           <th>Email</th>
           <th>Username</th>
           <th>Password</th>
@@ -45,7 +45,7 @@
         let result = res.map(function (v, k) {
           
           out += `<tr>
-                      <td><input type='hidden' id='data-${num++}' /><span>${v.id}</span></td>
+                       
                       <td><input type='text' id='data-${num++}' value='${v.email}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'email' })})' /><span class='td-hidden'>${v.email}</span></td> 
                       <td><input type='text' id='data-${num++}' value='${v.username}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'username' })})' /><span class='td-hidden'>${v.username}</span></td>
                       <td><input type='text' id='data-${num++}' value='${v.password}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'password' })})' /><span class='td-hidden'>${v.password}</span></td>
@@ -80,10 +80,19 @@
 
 </html>
 <style>
-  #tbody_user tr td input {
-    background: transparent;
-    border: none;
-  }
+#tbody_user tr td input {
+  background: transparent;
+  border: none;
+  font-size: 12pt;
+  padding: 6px;
+  border-radius: 0px;
+}
+#tbody_user tr td input:focus {
+    background: #edff8d;
+    color: #000;
+    /* border: 1px solid blue; */
+    /* border-radius: 1px; */
+}
 
   .td-hidden {
     display: none;

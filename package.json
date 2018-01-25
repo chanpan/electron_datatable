@@ -4,7 +4,8 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "rebuild": "electron-rebuild -f -w ./node_modules/oracledb"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -21,8 +22,11 @@
   },
   "dependencies": {
     "datatables": "^1.10.13",
+    "electron-rebuild": "^1.7.3",
     "jquery": "^3.3.1",
     "knex": "^0.14.2",
-    "mysql": "^2.15.0"
+    "mysql": "^2.15.0",
+    "nan": "^2.8.0",
+    "oracledb": "^2.0.15"
   }
 }

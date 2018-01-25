@@ -7,6 +7,26 @@
   <link rel="stylesheet" href="./assets/datatable/datatables.min.css" />
   <script>window.$ = window.jQuery = require('jquery');</script>
   <script src="./assets/datatable/datatables.min.js"></script>
+  <style>
+      #tbody_user tr td input {
+        background: transparent;
+        border: none;
+        font-size: 12pt;
+        padding: 6px;
+        border-radius: 0px;
+      }
+      #tbody_user tr td input:focus {
+          background: #edff8d;
+          color: #000;
+          /* border: 1px solid blue; */
+          /* border-radius: 1px; */
+      }
+
+        .td-hidden {
+          display: none;
+        }
+</style>
+
 </head>
 
 <body>
@@ -16,10 +36,9 @@
       <thead>
         <tr>
           
-          <th>Email</th>
-          <th>Username</th>
-          <th>Password</th>
-          <th>Create_at</th>
+          <th>Firstname</th>
+          <th>Lastname</th>
+          <th>Tel</th>
 
         </tr>
       </thead>
@@ -27,6 +46,7 @@
     </table>
   </div>
   <script>
+  
     var knex = require('knex')({
       client: 'mysql',
       connection: {
@@ -37,17 +57,32 @@
       }
     });
     load_user = () => {
-      knex.select("*").from("users").then(res => {
+      knex.select("*").from("profiles").then(res => {
         let out = "";
-        let num =1;
         let result = res.map(function (v, k) {
           
           out += `<tr>
-                       
-                      <td><input type='text' class='tab' id='data-${num++}' value='${v.email}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'email' })})' /><span class='td-hidden'>${v.email}</span></td> 
-                      <td><input type='text' class='tab' id='data-${num++}' value='${v.username}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'username' })})' /><span class='td-hidden'>${v.username}</span></td>
-                      <td><input type='text' class='tab' id='data-${num++}' value='${v.password}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'password' })})' /><span class='td-hidden'>${v.password}</span></td>
-                      <td><input type='text' class='tab' id='data-${num++}' value='${v.create_at}' onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'create_at' })})' /><span class='td-hidden'>${v.create_at}</span></td>
+                      <td>
+                        <input type='text' 
+                              class='tab' 
+                              value='${v.fname}' 
+                              onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'fname' })})' />
+                              <span class='td-hidden'>${v.fname}</span>
+                      </td>
+                      <td>
+                        <input type='text' 
+                              class='tab' 
+                              value='${v.lname}' 
+                              onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'lname' })})' />
+                              <span class='td-hidden'>${v.lname}</span>
+                      </td> 
+                      <td>
+                        <input type='text' 
+                              class='tab' 
+                              value='${v.tel}' 
+                              onChange='handleChanges(event, ${JSON.stringify(v)}, ${JSON.stringify({ key: 'tel' })})' />
+                              <span class='td-hidden'>${v.tel}</span>
+                      </td> 
           </tr>`;
           
         });
@@ -69,39 +104,18 @@
     
     handleChanges = (event, obj, fields) => {
       let data_value = event.target.value;
-      // let data_next_focus = event.target.id.split("-")[1];
-      // data_next_focus = parseInt(data_next_focus)+1;
-
       var date = new Date();
       var create_at = date.toLocaleDateString();
 
       obj[fields["key"]] = data_value;
-      obj["create_at"] = create_at;
-      let data_id = { id: obj.id };
-      delete obj.id;
+ 
+      let data_id = { user_id: obj.user_id };
+      delete obj.user_id;
 
-      knex('users').update(obj).where(data_id).then(res => { console.warn(res) }).catch(err => console.error(err));
+      knex('profiles').update(obj).where(data_id).then(res => { console.warn(res) }).catch(err => console.error(err));
     }
   </script>
 </body>
 
 </html>
-<style>
-#tbody_user tr td input {
-  background: transparent;
-  border: none;
-  font-size: 12pt;
-  padding: 6px;
-  border-radius: 0px;
-}
-#tbody_user tr td input:focus {
-    background: #edff8d;
-    color: #000;
-    /* border: 1px solid blue; */
-    /* border-radius: 1px; */
-}
 
-  .td-hidden {
-    display: none;
-  }
-</style>
